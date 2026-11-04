@@ -93,14 +93,18 @@ footer b{color:#e0b05a}
 <section id="quote"><div class="wrap cols">
 <div>
 <h2>Request a quote</h2><p class="sub">Tell us about your load and we’ll get back to you.</p>
-<form id="f" onsubmit="return false">
-<input id="n" placeholder="Your name" autocomplete="name">
-<input id="p" placeholder="Phone number" type="tel" autocomplete="tel">
-<input id="a" placeholder="Pickup location">
-<input id="b" placeholder="Delivery location">
-<textarea class="full" id="c" rows="4" placeholder="What are you moving? (type, weight, size, date)"></textarea>
-<button class="btn p" id="wa" type="button">Send via WhatsApp</button>
-<button class="btn s" id="em" type="button">Send via Email</button>
+<form id="f" action="https://formspree.io/f/xzeeyaek" method="POST">
+<input type="hidden" name="_subject" value="New quote request – MASA Logistics">
+<input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+<input id="n" name="name" placeholder="Your name" autocomplete="name" required>
+<input id="p" name="phone" placeholder="Phone number" type="tel" autocomplete="tel" required>
+<input class="full" id="e" name="email" placeholder="Email (optional)" type="email" autocomplete="email">
+<input id="a" name="pickup" placeholder="Pickup location">
+<input id="b" name="delivery" placeholder="Delivery location">
+<textarea class="full" id="c" name="message" rows="4" placeholder="What are you moving? (type, weight, size, date)"></textarea>
+<button class="btn p" id="sb" type="submit">Send Request</button>
+<button class="btn s" id="wa" type="button">Or WhatsApp us</button>
+<p class="full" id="st" role="status" style="margin:0;font-weight:600"></p>
 </form>
 </div>
 <div id="contact">
@@ -126,7 +130,8 @@ try{localStorage.setItem("masa-theme",n)}catch(e){}};
 function msg(){var v=function(i){return document.getElementById(i).value.trim()||"-"};
 return "Quote request – MASA Logistics\nName: "+v("n")+"\nPhone: "+v("p")+"\nPickup: "+v("a")+"\nDelivery: "+v("b")+"\nLoad: "+v("c")}
 document.getElementById("wa").onclick=function(){window.open("https://wa.me/27793316915?text="+encodeURIComponent(msg()),"_blank")};
-document.getElementById("em").onclick=function(){location.href="mailto:masalogistics2026@gmail.com?subject="+encodeURIComponent("Quote request")+"&body="+encodeURIComponent(msg())};
+document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();var f=this,st=document.getElementById("st"),b=document.getElementById("sb");b.disabled=true;st.textContent="Sending…";
+fetch(f.action,{method:"POST",body:new FormData(f),headers:{Accept:"application/json"}}).then(function(r){if(!r.ok)throw 0;f.reset();st.textContent="Thank you! We’ve received your request and will be in touch soon."}).catch(function(){st.textContent="Sorry, that didn’t send. Please WhatsApp us or call +27 79 331 6915."}).then(function(){b.disabled=false})});
 })();
 </script>
 </body>
